@@ -78,6 +78,11 @@ func (h *AuthHandler) Register(c *gin.Context) {
 			"Data tidak valid: nama minimal 2 karakter, email harus valid, password 8-72 karakter")
 		return
 	}
+	// bcrypt hanya membaca 72 BYTE pertama; karakter non-ASCII (mis. emoji) memakai lebih dari 1 byte.
+	if len(req.Password) > 72 {
+		httpx.Error(c, http.StatusBadRequest, "validation_error", "Password terlalu panjang (maksimal 72 byte)")
+		return
+	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcryptCost)
 	if err != nil {
@@ -232,7 +237,7 @@ func (h *AuthHandler) UpdateMe(c *gin.Context) {
 }
 
 // DeleteMe menghapus akun setelah konfirmasi password.
-// TODO (phase berikutnya): hapus juga transaksi, anggaran, dan target tabungan milik user.
+// Data milik user dihapus lebih dulu. Jika ada yang gagal, akun tetap ada sehingga bisa dicoba lagi.
 func (h *AuthHandler) DeleteMe(c *gin.Context) {
 	var req deleteMeReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -249,11 +254,12 @@ func (h *AuthHandler) DeleteMe(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
-	_, _ = h.sessions.DeleteMany(ctx, bson.M{"user_id": user.ID})
-	_, _ = h.db.Collection("transactions").DeleteMany(ctx, bson.M{"user_id": user.ID})
-	_, _ = h.db.Collection("budgets").DeleteMany(ctx, bson.M{"user_id": user.ID})
-	_, _ = h.db.Collection("savings_contributions").DeleteMany(ctx, bson.M{"user_id": user.ID})
-	_, _ = h.db.Collection("savings_goals").DeleteMany(ctx, bson.M{"user_id": user.ID})
+	for _, name := range []string{"transactions", "budgets", "savings_contributions", "savings_goals", "sessions"} {
+		if _, err := h.db.Collection(name).DeleteMany(ctx, bson.M{"user_id": user.ID}); err != nil {
+			httpx.Error(c, http.StatusInternalServerError, "internal_error", "Terjadi kesalahan server")
+			return
+		}
+	}
 	if _, err := h.users.DeleteOne(ctx, bson.M{"_id": user.ID}); err != nil {
 		httpx.Error(c, http.StatusInternalServerError, "internal_error", "Terjadi kesalahan server")
 		return
