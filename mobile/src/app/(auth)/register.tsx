@@ -173,7 +173,7 @@ export default function RegisterScreen() {
                 </Text>
                 <Link
                   href="/login"
-                  style={{ color: colors.primary, fontWeight: "700" }}
+                  style={{ color: colors.primaryText, fontWeight: "700" }}
                 >
                   Masuk
                 </Link>

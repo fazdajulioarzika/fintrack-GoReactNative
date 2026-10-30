@@ -58,7 +58,7 @@ export default function GoalDetailScreen() {
 
   const g = goal.data?.goal;
   const done = g?.status === "achieved";
-  const color = done ? colors.income : colors.primary;
+  const color = done ? colors.income : colors.primaryText;
 
   const openMode = (m: Mode) => {
     setMode(m);

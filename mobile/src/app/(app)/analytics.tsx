@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { DateField } from "@/components/ui/DateField";
 import {
   ActivityIndicator,
   Pressable,
@@ -298,23 +299,17 @@ export default function AnalyticsScreen() {
             <GlassCard solid style={styles.card}>
               <View style={styles.dateRow}>
                 <View style={{ flex: 1 }}>
-                  <TextField
+                  <DateField
                     label="Dari"
                     value={startText}
-                    onChangeText={setStartText}
-                    placeholder="2026-10-01"
-                    keyboardType="numbers-and-punctuation"
-                    maxLength={10}
+                    onChange={setStartText}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <TextField
+                  <DateField
                     label="Sampai"
                     value={endText}
-                    onChangeText={setEndText}
-                    placeholder="2026-10-31"
-                    keyboardType="numbers-and-punctuation"
-                    maxLength={10}
+                    onChange={setEndText}
                   />
                 </View>
               </View>
@@ -375,7 +370,7 @@ export default function AnalyticsScreen() {
                 {formatDay(s.period.end_date)}
               </Text>
 
-              <GlassCard style={styles.card}>
+              <GlassCard blur style={styles.card}>
                 <Text style={[styles.small, { color: colors.textMuted }]}>
                   Selisih arus kas
                 </Text>

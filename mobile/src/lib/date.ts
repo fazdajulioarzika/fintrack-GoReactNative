@@ -80,3 +80,14 @@ export function daysInclusive(a: string, b: string): number {
     ) + 1
   );
 }
+export function strToDate(s: string): Date {
+  if (isValidDateStr(s)) {
+    const [y, m, d] = s.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+  return new Date();
+}
+
+export function dateToStr(d: Date): string {
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}

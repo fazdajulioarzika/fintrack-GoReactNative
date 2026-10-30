@@ -1,10 +1,10 @@
-import type { Colors } from "@/theme/colors";
 import type { Budget } from "@/lib/types";
+import type { Colors } from "@/theme/colors";
 
 export function budgetColor(status: Budget["status"], colors: Colors): string {
   if (status === "exceeded") return colors.expense;
-  if (status === "warning") return "#F59E0B";
-  return colors.primary;
+  if (status === "warning") return colors.warning;
+  return colors.primaryText;
 }
 
 export function budgetLabel(status: Budget["status"]): string {

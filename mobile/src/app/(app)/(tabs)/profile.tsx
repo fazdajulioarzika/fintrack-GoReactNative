@@ -110,7 +110,7 @@ export default function ProfileScreen() {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
-          <GlassCard solid style={styles.card}>
+          <GlassCard blur style={styles.card}>
             <Text style={[styles.section, { color: colors.text }]}>Akun</Text>
             <TextField
               label="Nama"
@@ -231,7 +231,7 @@ export default function ProfileScreen() {
             </GlassCard>
           </Pressable>
 
-          <Button title="Keluar" variant="outline" onPress={logout} />
+          <Button title="Keluar" onPress={logout} />
 
           <GlassCard solid style={[styles.card, { marginTop: 24 }]}>
             <Text style={[styles.section, { color: colors.danger }]}>
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   scroll: {
     padding: 20,
-    paddingBottom: 120,
+    paddingBottom: 24,
     maxWidth: 560,
     width: "100%",
     alignSelf: "center",

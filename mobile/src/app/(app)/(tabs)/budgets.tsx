@@ -96,7 +96,7 @@ export default function BudgetsScreen() {
 
               {budgets.data && (
                 <>
-                  <GlassCard style={styles.card}>
+                  <GlassCard blur style={styles.card}>
                     <Text style={[styles.small, { color: colors.textMuted }]}>
                       Total terpakai
                     </Text>
@@ -221,7 +221,7 @@ export default function BudgetsScreen() {
 
           {tab === "savings" && goals.data && (
             <>
-              <GlassCard style={[styles.card, { marginTop: 16 }]}>
+              <GlassCard blur style={[styles.card, { marginTop: 16 }]}>
                 <Text style={[styles.small, { color: colors.textMuted }]}>
                   Total tabungan
                 </Text>
@@ -248,7 +248,7 @@ export default function BudgetsScreen() {
 
               {goals.data.data.map((g) => {
                 const done = g.status === "achieved";
-                const color = done ? colors.income : colors.primary;
+                const color = done ? colors.income : colors.primaryText;
                 return (
                   <Pressable
                     key={g.id}
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   scroll: {
     padding: 20,
-    paddingBottom: 120,
+    paddingBottom: 124,
     maxWidth: 560,
     width: "100%",
     alignSelf: "center",

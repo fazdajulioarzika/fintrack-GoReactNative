@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
+import { DateField } from "@/components/ui/DateField";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -172,13 +173,11 @@ export default function GoalFormScreen() {
                 onChangeDigits={setDigits}
                 accent={colors.primary}
               />
-              <TextField
-                label="Target tanggal (opsional, TTTT-BB-HH)"
+              <DateField
+                label="Target tanggal (opsional)"
                 value={dateText}
-                onChangeText={setDateText}
-                placeholder="2027-06-30"
-                keyboardType="numbers-and-punctuation"
-                maxLength={10}
+                onChange={setDateText}
+                clearable
               />
 
               <Text style={[styles.label, { color: colors.text }]}>Ikon</Text>
@@ -195,10 +194,10 @@ export default function GoalFormScreen() {
                         styles.iconBox,
                         {
                           backgroundColor: selected
-                            ? colors.primary
+                            ? colors.primaryStrong
                             : colors.inputBg,
                           borderColor: selected
-                            ? colors.primary
+                            ? colors.primaryStrong
                             : colors.inputBorder,
                         },
                       ]}

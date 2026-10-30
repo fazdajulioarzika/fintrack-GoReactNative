@@ -4,10 +4,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,12 +13,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ScreenHeader } from "@/components/ScreenHeader";
+import { AmountInput, MAX_AMOUNT } from "@/components/ui/AmountInput";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
+import { DateField } from "@/components/ui/DateField";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GradientBackground } from "@/components/ui/GradientBackground";
 import { TextField } from "@/components/ui/TextField";
 import { api, ApiError } from "@/lib/api";
+import { confirmAction } from "@/lib/confirm";
 import {
   dateStrToISO,
   isValidDateStr,
@@ -29,13 +31,10 @@ import {
 } from "@/lib/date";
 import { invalidateFinance } from "@/lib/queries";
 import type { Category, IconName, Transaction, TxType } from "@/lib/types";
+import { onColor } from "@/theme/contrast";
 import { useTheme } from "@/theme/useTheme";
 
-const MAX_AMOUNT = 999_999_999_999;
 const PAYMENTS = ["Tunai", "Transfer", "E-wallet", "Kartu"];
-
-const groupDigits = (digits: string) =>
-  digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 export default function TransactionFormScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -93,11 +92,6 @@ export default function TransactionFormScreen() {
     setCategoryId(null); // kategori harus sesuai jenis transaksi
   };
 
-  const onAmountChange = (text: string) => {
-    const only = text.replace(/\D/g, "").replace(/^0+/, "").slice(0, 12);
-    setDigits(only);
-  };
-
   const save = async () => {
     setError("");
     const amount = parseInt(digits || "0", 10);
@@ -141,31 +135,21 @@ export default function TransactionFormScreen() {
     }
   };
 
-  const confirmDelete = () => {
-    Alert.alert(
+  const confirmDelete = async () => {
+    const ok = await confirmAction(
       "Hapus transaksi?",
-      "Transaksi ini akan dihapus permanen dan saldo akan dihitung ulang.",
-      [
-        { text: "Batal", style: "cancel" },
-        {
-          text: "Hapus",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await api.delete(`/transactions/${id}`);
-              invalidateFinance(qc);
-              router.back();
-            } catch (e) {
-              setError(
-                e instanceof ApiError
-                  ? e.message
-                  : "Gagal menghapus. Coba lagi."
-              );
-            }
-          },
-        },
-      ]
+      "Transaksi ini akan dihapus permanen dan saldo akan dihitung ulang."
     );
+    if (!ok) return;
+    try {
+      await api.delete(`/transactions/${id}`);
+      invalidateFinance(qc);
+      router.back();
+    } catch (e) {
+      setError(
+        e instanceof ApiError ? e.message : "Gagal menghapus. Coba lagi."
+      );
+    }
   };
 
   const accent = type === "income" ? colors.income : colors.expense;
@@ -233,25 +217,11 @@ export default function TransactionFormScreen() {
                 </View>
               </View>
 
-              <Text style={[styles.label, { color: colors.text }]}>
-                Nominal
-              </Text>
-              <View
-                style={[
-                  styles.amountBox,
-                  {
-                    backgroundColor: colors.inputBg,
-                    borderColor: colors.inputBorder,
-                  },
-                ]}
-              >
-                <Text style={[styles.rp, { color: accent }]}>Rp</Text>
-                <TextField_Amount
-                  value={groupDigits(digits)}
-                  onChangeText={onAmountChange}
-                  color={colors.text}
-                />
-              </View>
+              <AmountInput
+                digits={digits}
+                onChangeDigits={setDigits}
+                accent={accent}
+              />
 
               <Text style={[styles.label, { color: colors.text }]}>
                 Kategori
@@ -276,20 +246,19 @@ export default function TransactionFormScreen() {
                     <Ionicons
                       name={(c.icon || "pricetag") as IconName}
                       size={14}
-                      color={categoryId === c.id ? "#FFFFFF" : colors.textMuted}
+                      color={
+                        categoryId === c.id ? onColor(accent) : colors.textMuted
+                      }
                     />
                   </Chip>
                 ))}
               </View>
 
-              <View style={{ height: 14 }} />
-              <TextField
-                label="Tanggal (TTTT-BB-HH)"
+              <View style={{ height: 16 }} />
+              <DateField
+                label="Tanggal"
                 value={dateText}
-                onChangeText={setDateText}
-                placeholder="2026-10-29"
-                keyboardType="numbers-and-punctuation"
-                maxLength={10}
+                onChange={setDateText}
               />
               <View style={[styles.wrap, { marginTop: -6, marginBottom: 14 }]}>
                 <Chip
@@ -355,31 +324,6 @@ export default function TransactionFormScreen() {
   );
 }
 
-// Input nominal besar, dipisah agar gayanya berbeda dari TextField biasa
-import { TextInput } from "react-native";
-import { ScreenHeader } from "@/components/ScreenHeader";
-function TextField_Amount({
-  value,
-  onChangeText,
-  color,
-}: {
-  value: string;
-  onChangeText: (t: string) => void;
-  color: string;
-}) {
-  return (
-    <TextInput
-      value={value}
-      onChangeText={onChangeText}
-      placeholder="0"
-      placeholderTextColor="#94A3B8"
-      keyboardType="number-pad"
-      style={{ flex: 1, fontSize: 26, fontWeight: "800", color }}
-      accessibilityLabel="Nominal"
-    />
-  );
-}
-
 const styles = StyleSheet.create({
   fill: { flex: 1 },
   scroll: {
@@ -389,27 +333,9 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 16,
-  },
-  title: { fontSize: 22, fontWeight: "800" },
   card: { padding: 18 },
   typeRow: { flexDirection: "row", gap: 10, marginBottom: 18 },
   label: { fontSize: 14, fontWeight: "600", marginBottom: 8 },
-  amountBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    height: 62,
-    marginBottom: 18,
-  },
-  rp: { fontSize: 20, fontWeight: "800" },
   wrap: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   error: { fontSize: 13, marginBottom: 12 },
 });

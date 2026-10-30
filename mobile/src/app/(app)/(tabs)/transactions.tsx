@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 120,
+    paddingBottom: 24,
     maxWidth: 560,
     width: "100%",
     alignSelf: "center",

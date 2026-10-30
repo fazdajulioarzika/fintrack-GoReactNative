@@ -184,7 +184,7 @@ export default function BudgetFormScreen() {
                               label={c.name}
                               selected={categoryId === c.id}
                               onPress={() => setCategoryId(c.id)}
-                              tint={colors.secondary}
+                              tint={colors.secondaryStrong}
                             >
                               <Ionicons
                                 name={(c.icon || "pricetag") as IconName}

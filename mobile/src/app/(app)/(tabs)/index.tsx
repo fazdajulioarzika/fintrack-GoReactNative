@@ -30,6 +30,7 @@ import type {
   TxList,
 } from "@/lib/types";
 import { useTheme } from "@/theme/useTheme";
+import { budgetColor } from "@/lib/budget";
 
 function CashflowBars({ data }: { data: CashflowPoint[] }) {
   const { colors } = useTheme();
@@ -154,12 +155,7 @@ export default function HomeScreen() {
     setRefreshing(false);
   };
 
-  const statusColor = (s: Budget["status"]) =>
-    s === "exceeded"
-      ? colors.expense
-      : s === "warning"
-      ? "#F59E0B"
-      : colors.primary;
+  const statusColor = (s: Budget["status"]) => budgetColor(s, colors);
 
   return (
     <GradientBackground>
@@ -213,7 +209,7 @@ export default function HomeScreen() {
             </Pressable>
           </View>
 
-          <GlassCard style={styles.card}>
+          <GlassCard blur style={styles.card}>
             <Text style={[styles.label, { color: colors.textMuted }]}>
               Total saldo
             </Text>
@@ -267,7 +263,7 @@ export default function HomeScreen() {
                 Arus kas
               </Text>
               <Pressable onPress={() => router.push("/analytics")} hitSlop={8}>
-                <Text style={{ color: colors.primary, fontWeight: "700" }}>
+                <Text style={{ color: colors.primaryText, fontWeight: "700" }}>
                   Analisis
                 </Text>
               </Pressable>
@@ -374,7 +370,7 @@ export default function HomeScreen() {
                 onPress={() => router.push("/transactions")}
                 hitSlop={8}
               >
-                <Text style={{ color: colors.primary, fontWeight: "700" }}>
+                <Text style={{ color: colors.primaryText, fontWeight: "700" }}>
                   Lihat semua
                 </Text>
               </Pressable>
@@ -410,7 +406,7 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   scroll: {
     padding: 20,
-    paddingBottom: 120,
+    paddingBottom: 24,
     maxWidth: 560,
     width: "100%",
     alignSelf: "center",

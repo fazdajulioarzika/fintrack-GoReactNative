@@ -1,43 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { Tabs, useRouter } from "expo-router";
 import React from "react";
-import { Platform, StyleSheet, View, ColorValue } from "react-native";
+import { StyleSheet } from "react-native";
 
-import type { IconName } from "@/lib/types";
 import { useTheme } from "@/theme/useTheme";
-
-function TabBackground() {
-  const { colors, isDark } = useTheme();
-  if (Platform.OS === "ios") {
-    return (
-      <BlurView
-        intensity={50}
-        tint={isDark ? "dark" : "light"}
-        style={StyleSheet.absoluteFill}
-      />
-    );
-  }
-  // Android/web: fallback semi-transparan (PRD 8.3)
-  return (
-    <View
-      style={[
-        StyleSheet.absoluteFill,
-        {
-          backgroundColor: colors.glassBgFallback,
-          borderTopWidth: 1,
-          borderTopColor: colors.glassBorder,
-        },
-      ]}
-    />
-  );
-}
-
-const icon = (name: IconName) =>
-  function TabIcon({ color, size }: { color: ColorValue; size: number }) {
-    return <Ionicons name={name} size={size} color={color} />;
-  };
 
 export default function TabsLayout() {
   const { colors } = useTheme();
@@ -47,25 +14,34 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
+        tabBarActiveTintColor: colors.primaryText,
         tabBarInactiveTintColor: colors.textMuted,
-        tabBarBackground: () => <TabBackground />,
+        // Solid dan tidak melayang: konten berhenti di atas tab bar, tidak lewat di bawahnya
         tabBarStyle: {
-          position: "absolute",
-          backgroundColor: "transparent",
-          borderTopWidth: 0,
-          elevation: 0,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.inputBorder,
+          borderTopWidth: StyleSheet.hairlineWidth,
         },
         tabBarLabelStyle: { fontSize: 11, fontWeight: "600" },
       }}
     >
       <Tabs.Screen
         name="index"
-        options={{ title: "Beranda", tabBarIcon: icon("home") }}
+        options={{
+          title: "Beranda",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
       />
       <Tabs.Screen
         name="transactions"
-        options={{ title: "Transaksi", tabBarIcon: icon("swap-vertical") }}
+        options={{
+          title: "Transaksi",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="swap-vertical" size={size} color={color} />
+          ),
+        }}
       />
       <Tabs.Screen
         name="add"
@@ -92,11 +68,21 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="budgets"
-        options={{ title: "Anggaran", tabBarIcon: icon("pie-chart") }}
+        options={{
+          title: "Anggaran",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="pie-chart" size={size} color={color} />
+          ),
+        }}
       />
       <Tabs.Screen
         name="profile"
-        options={{ title: "Profil", tabBarIcon: icon("person") }}
+        options={{
+          title: "Profil",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
       />
     </Tabs>
   );

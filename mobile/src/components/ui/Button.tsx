@@ -47,7 +47,7 @@ export function Button({
       style={({ pressed }) => [{ opacity: inactive ? 0.6 : pressed ? 0.9 : 1 }]}
     >
       <LinearGradient
-        colors={[colors.primary, colors.secondary]}
+        colors={[colors.primaryStrong, colors.secondaryStrong]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.base}
