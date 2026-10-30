@@ -37,7 +37,11 @@ func NewRouter(cfg *config.Config, client *mongo.Client, db *mongo.Database) *gi
 		middleware.MaxBody(1<<20), // 1 MB
 	)
 
-	// Di belakang proxy hosting, isi TRUSTED_PROXIES agar IP asli pengguna terbaca (untuk rate limit).
+	// Di platform seperti Vercel, IP asli ada di header khusus. Rate limit memakai IP ini.
+	// Vercel menimpa X-Forwarded-For dengan IP klien asli, jadi aman dipercaya di sana.
+	if cfg.ClientIPHeader != "" {
+		r.TrustedPlatform = cfg.ClientIPHeader
+	}
 	if len(cfg.TrustedProxies) > 0 {
 		_ = r.SetTrustedProxies(cfg.TrustedProxies)
 	} else {

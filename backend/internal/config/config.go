@@ -23,6 +23,8 @@ type Config struct {
 	TrustedProxies []string
 	AuthRatePerMin int
 	AuthBurst      int
+	SkipDBSetup    bool
+	ClientIPHeader string
 }
 
 func Load() (*Config, error) {
@@ -47,6 +49,8 @@ func Load() (*Config, error) {
 		TrustedProxies: splitCSV(os.Getenv("TRUSTED_PROXIES")),
 		AuthRatePerMin: getInt("AUTH_RATE_PER_MIN", 10),
 		AuthBurst:      getInt("AUTH_BURST", 5),
+		SkipDBSetup:    os.Getenv("SKIP_DB_SETUP") == "true",
+		ClientIPHeader: os.Getenv("CLIENT_IP_HEADER"),
 	}
 
 	if cfg.MongoURI == "" {

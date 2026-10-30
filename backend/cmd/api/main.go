@@ -31,10 +31,14 @@ func main() {
 	}
 	defer client.Disconnect(context.Background())
 
-	if err := database.Setup(ctx, db); err != nil {
-		log.Fatalf("setup database gagal: %v", err)
+	if cfg.SkipDBSetup {
+		log.Println("SKIP_DB_SETUP aktif: pembuatan indeks dilewati")
+	} else {
+		if err := database.Setup(ctx, db); err != nil {
+			log.Fatalf("setup database gagal: %v", err)
+		}
+		log.Println("MongoDB terhubung, indeks siap")
 	}
-	log.Println("MongoDB terhubung, indeks siap")
 
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,
