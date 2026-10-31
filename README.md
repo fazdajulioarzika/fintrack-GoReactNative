@@ -4,13 +4,23 @@ Aplikasi mobile untuk mencatat transaksi, mengontrol anggaran bulanan, dan meman
 
 > Prinsip pengembangan: **kebenaran data keuangan dan keamanan lebih dulu**, baru visual.
 
-## Screenshot
+## Screenshots
 
-| Beranda                                                                     | Transaksi                                                                                   | Anggaran                                                                         | Analisis                                                                              |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| ![Beranda](docs/screenshots/dark-home.jpg)(docs/screenshots/light-home.jpg) | ![Transaksi](docs/screenshots/dark-transaction.jpg)(docs/screenshots/light-transaction.jpg) | ![Anggaran](docs/screenshots/dark-budget.jpg)(docs/screenshots/light-budget.jpg) | ![Analisis](docs/screenshots/dark-analytics.jpg)(docs/screenshots/dark-analytics.jpg) |
+|                      Beranda                      |                         Transaksi                          |
+| :-----------------------------------------------: | :--------------------------------------------------------: |
+|                   **Dark Mode**                   |                       **Dark Mode**                        |
+|  ![Beranda Dark](docs/screenshots/dark-home.jpg)  |  ![Transaksi Dark](docs/screenshots/dark-transaction.jpg)  |
+|                  **Light Mode**                   |                       **Light Mode**                       |
+| ![Beranda Light](docs/screenshots/light-home.jpg) | ![Transaksi Light](docs/screenshots/light-transaction.jpg) |
 
-Video demo: _tambahkan tautan_ · APK: _tambahkan tautan Releases_
+|                       Anggaran                       |                        Analisis                         |
+| :--------------------------------------------------: | :-----------------------------------------------------: |
+|                    **Dark Mode**                     |                      **Dark Mode**                      |
+|  ![Anggaran Dark](docs/screenshots/dark-budget.jpg)  |  ![Analisis Dark](docs/screenshots/dark-analytics.jpg)  |
+|                    **Light Mode**                    |                     **Light Mode**                      |
+| ![Anggaran Light](docs/screenshots/light-budget.jpg) | ![Analisis Light](docs/screenshots/light-analytics.jpg) |
+
+- **Download APK:** [FinTrack v1.0.0](https://github.com/fazdajulioarzika/fintrack-GoReactNative/releases/download/v1.0.0/FinTrack.v1.0.0.apk)
 
 ## Akun demo (data fiktif)
 
