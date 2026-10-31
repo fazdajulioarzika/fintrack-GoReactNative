@@ -1,43 +1,43 @@
 # FinTrack — Personal Finance Tracker
 
-Aplikasi mobile untuk mencatat transaksi, mengontrol anggaran bulanan, dan memantau target tabungan, dengan antarmuka *Modern Glass Finance* (glassmorphism). Dibangun penuh dari nol: aplikasi React Native, REST API Go, dan database MongoDB.
+Aplikasi mobile untuk mencatat transaksi, mengontrol anggaran bulanan, dan memantau target tabungan, dengan antarmuka _Modern Glass Finance_ (glassmorphism). Dibangun penuh dari nol: aplikasi React Native, REST API Go, dan database MongoDB.
 
 > Prinsip pengembangan: **kebenaran data keuangan dan keamanan lebih dulu**, baru visual.
 
 ## Screenshot
 
-| Beranda | Transaksi | Anggaran | Analisis |
-|---|---|---|---|
-| ![Beranda](docs/screenshots/home.png) | ![Transaksi](docs/screenshots/transactions.png) | ![Anggaran](docs/screenshots/budgets.png) | ![Analisis](docs/screenshots/analytics.png) |
+| Beranda                                                                     | Transaksi                                                                                   | Anggaran                                                                         | Analisis                                                                              |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| ![Beranda](docs/screenshots/dark-home.jpg)(docs/screenshots/light-home.jpg) | ![Transaksi](docs/screenshots/dark-transaction.jpg)(docs/screenshots/light-transaction.jpg) | ![Anggaran](docs/screenshots/dark-budget.jpg)(docs/screenshots/light-budget.jpg) | ![Analisis](docs/screenshots/dark-analytics.jpg)(docs/screenshots/dark-analytics.jpg) |
 
 Video demo: _tambahkan tautan_ · APK: _tambahkan tautan Releases_
 
 ## Akun demo (data fiktif)
 
-| | |
-|---|---|
-| Email | `demo@fintrack.app` |
-| Password | `Demo12345` |
+|          |                     |
+| -------- | ------------------- |
+| Email    | `demo@fintrack.app` |
+| Password | `Demo12345`         |
 
 ## Fitur
 
 - **Autentikasi**: registrasi, login, logout, sesi dengan refresh token yang dirotasi, hapus akun dengan konfirmasi password.
 - **Dashboard**: saldo, pemasukan/pengeluaran bulan berjalan, grafik arus kas harian, ringkasan kategori, progres anggaran, transaksi terbaru.
 - **Transaksi**: tambah, ubah, hapus, detail; filter jenis, pencarian catatan, scroll tak terbatas; kategori default.
-- **Anggaran**: batas per kategori per bulan dengan status *normal / hampir habis / terlampaui*.
+- **Anggaran**: batas per kategori per bulan dengan status _normal / hampir habis / terlampaui_.
 - **Target tabungan**: setoran dan penarikan dengan riwayat, progres, dan status tercapai otomatis.
 - **Analisis**: bulan ini / bulan lalu / rentang kustom, tren harian atau bulanan, perbandingan dengan periode sebelumnya.
 - **Pengaturan**: ubah nama, zona waktu (WIB/WITA/WIT), tema terang/gelap/sistem.
-- Setiap layar data punya state *loading*, *kosong*, *error*, dan validasi formulir.
+- Setiap layar data punya state _loading_, _kosong_, _error_, dan validasi formulir.
 
 ## Teknologi
 
-| Lapisan | Teknologi |
-|---|---|
-| Mobile | React Native, Expo, TypeScript, Expo Router, TanStack Query, React Hook Form + Zod, expo-secure-store, expo-blur |
-| Backend | Go, Gin, MongoDB Go Driver v2, JWT, bcrypt |
-| Database | MongoDB Atlas |
-| Deploy | Vercel (backend), EAS Build (APK) |
+| Lapisan  | Teknologi                                                                                                        |
+| -------- | ---------------------------------------------------------------------------------------------------------------- |
+| Mobile   | React Native, Expo, TypeScript, Expo Router, TanStack Query, React Hook Form + Zod, expo-secure-store, expo-blur |
+| Backend  | Go, Gin, MongoDB Go Driver v2, JWT, bcrypt                                                                       |
+| Database | MongoDB Atlas                                                                                                    |
+| Deploy   | Vercel (backend), EAS Build (APK)                                                                                |
 
 ## Arsitektur
 
@@ -162,6 +162,7 @@ Anggaran unik per `(user_id, category_id, period)`. Saldo dan pemakaian anggaran
 ## Menjalankan secara lokal
 
 ### Backend
+
 ```bash
 cd backend
 cp .env.example .env        # isi MONGO_URI (MongoDB Atlas) dan JWT_SECRET (>= 32 karakter)
@@ -171,12 +172,14 @@ go run ./cmd/seed           # opsional: akun demo berisi data fiktif
 ```
 
 ### Mobile
+
 ```bash
 cd mobile
 npm install
 echo "EXPO_PUBLIC_API_URL=http://IP-LAPTOP:8080/api/v1" > .env
 npx expo start -c           # scan QR dengan Expo Go
 ```
+
 HP tidak bisa mengakses `localhost` laptop; pakai IP laptop di jaringan Wi-Fi yang sama.
 
 ## Pengujian
